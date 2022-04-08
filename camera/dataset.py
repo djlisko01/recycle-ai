@@ -56,12 +56,13 @@ class ImageClassificationDataset(torch.utils.data.Dataset):
                     'category': category
                 }]
     
-    def save_entry(self, image, category):
+    def save_entry(self, image, category, filename):
         """Saves an image in BGR8 format to dataset for category"""
         if category not in self.categories:
             raise KeyError('There is no category named %s in this dataset.' % category)
             
-        filename = str(uuid.uuid1()) + '.jpg'
+#         filename = str(uuid.uuid1()) + '.jpg'
+        filename += '.jpg'
         category_directory = os.path.join(self.directory, category)
         
         if not os.path.exists(category_directory):
