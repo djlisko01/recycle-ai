@@ -21,12 +21,6 @@ class VideoCapture:
 
     print(self.ret)
 
-
-    #Get Video height, width and FPS
-    # Resize the Frame
-    # self.capture.set(cv2.CAP_PROP_FRAME_WIDTH, width)
-    # self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
-
   def get_frame(self):
     self.process()
     return self.ret, self.frame
