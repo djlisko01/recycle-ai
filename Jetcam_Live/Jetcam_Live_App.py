@@ -1,3 +1,4 @@
+#---------Imports
 from ast import mod
 from importlib.util import module_for_loader
 from tkinter import *
@@ -7,26 +8,31 @@ import PIL
 from threading import Thread
 from LiveGraphs import LivePVals
 from random import random
-from Predictor import RecyclePredict
+# from Predictor import RecyclePredict
 from os.path import exists
 import torch
 import os
+#---------End of imports
 
 RECYCLE_TYPE = ["Cardbrd", "Glass", "Metal", "Paper", "Plastic", "Trash"]
 
 class App:
-
+  """ This will run an application that provides a live video feed, 
+  a graph with real time probability predictions and the prediction for recycling waste. 
+  This also allows adminstrators to take a snap shot of a miscategorized item, which can be used
+  to furhter improve predicitons.
+  """
   def __init__(self, trained_file_path, camera_src = 0) -> None:
     # Load the Trained Model
-    self.model = RecyclePredict()
+    # self.model = RecyclePredict()
 
-    if exists(trained_file_path):
-      self.model.prep_model(RECYCLE_TYPE) # Loads the ResNet that the model was trained on
-      self.model.load_trained_model(trained_file_path) # Loads the trained Model
-    else:
-      print("Trained File Path doesn't exist...")
-      print("Quiting Program")
-      os._exit(0)
+    # if exists(trained_file_path):
+    #   self.model.prep_model(RECYCLE_TYPE) # Loads the ResNet that the model was trained on
+    #   self.model.load_trained_model(trained_file_path) # Loads the trained Model
+    # else:
+    #   print("Trained File Path doesn't exist...")
+    #   print("Quiting Program")
+    #   os._exit(0)
     
     # Create the window
     self.window = Tk()
@@ -98,14 +104,8 @@ class App:
     # Run Update Frame on Live a Thread
     camera_thrd = Thread(target=self.update_frame)
     camera_thrd.start()
-    predict_thrd = Thread(target=self.update_predictions)
-    predict_thrd.start()
-
-    # if self.image:
-    #   graph_thrd = Thread(target=utils.preprocess_image, args=(self.image, "cuda", self.model))
-    #   graph_thrd.start()
-    #   print("HERE", graph_thrd)
-
+    # predict_thrd = Thread(target=self.update_predictions)
+    # predict_thrd.start()
 
     # This will replot the the graph every 200 ms
     ani = self.live_graph.run_animation()
@@ -122,6 +122,10 @@ class App:
       self.isConverted = True
 
       self.canvas_img.create_image(0, 0, image=self.photo, anchor="nw")
+
+
+      # This is to generate random live y_vals for now
+      self.live_graph.y_vals = [random() for i in range(len(RECYCLE_TYPE))]
      
       if self.camera.is_running:
         self.window.after(self.delay, self.update_frame)
@@ -133,7 +137,6 @@ class App:
       probs = self.model.get_probabilities(self.image)
       print(probs)
       
-
     self.isConverted = False
 
     if self.camera.is_running:

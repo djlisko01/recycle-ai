@@ -1,11 +1,15 @@
+#---------Imports
 import cv2
 import os
 import time
-class VideoCapture:
+#---------End of imports
 
+class VideoCapture:
+  
 
   def __init__(self, width=224, height=224, capture_src = 0, fps=30) -> None:
-
+    """This Creates a Video Capture Object, which will set up the camera
+     with a height, width and capture rate (in fps) """
     # Open the video source
     self.capture = cv2.VideoCapture(capture_src)
     self.is_running = True
@@ -19,18 +23,18 @@ class VideoCapture:
     self.ret = False
     self.frame = None
 
-    print(self.ret)
-
   def get_frame(self):
+    """ This will return the frame and if boolean of weather there's an image or not """
     self.process()
     return self.ret, self.frame
 
   
   def process(self):
-    if self.is_running:
 
+    """ Processes a live feed if the camera is running """
+
+    if self.is_running:
       # Capture the video frame
-      # by frame
       ret, frame = self.capture.read()
 
       if ret:
@@ -41,13 +45,12 @@ class VideoCapture:
         print("[Video Capture Failed] stream end")
         self.is_running = False
       
-
       self.ret = ret
       self.frame = frame
       time.sleep(1/self.fps)
 
   def __del__(self):
-    # Stop the read
+    """ Releases the camera when the program is closed """
     if self.is_running:
       self.is_running = False
     

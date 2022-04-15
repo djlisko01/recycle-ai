@@ -9,6 +9,7 @@ import matplotlib.animation as animation
 
 
 class LivePVals:
+  """ This is a class object for generating a live graph animation"""
   def __init__(self, x_vals) -> None:
       self.figure = plt.Figure(figsize = (4, 2), dpi = 100)
       self.ax = self.figure.add_subplot(111)
@@ -17,6 +18,7 @@ class LivePVals:
       
 
   def animate(self, i):
+      """ Used to create the bar graph """
       # update the data
       # self.y_vals = [random() for i in range(len(self.x_vals))]
       self.ax.cla()
@@ -24,8 +26,10 @@ class LivePVals:
       return self.ax.bar(self.x_vals, self.y_vals)
 
   def run_animation(self):
+    # Calls animate method every 200 intervals (200 ms)
     return animation.FuncAnimation(self.figure, self.animate, interval=200, blit=True)
 
 
   def create_graph_canvas(self, parent_frame):
+    """ Draws the graph on Tk canvas. """
     return FigureCanvasTkAgg(self.figure, master=parent_frame)
