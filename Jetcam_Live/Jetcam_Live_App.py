@@ -1,20 +1,33 @@
-from concurrent.futures import thread
+from ast import mod
+from importlib.util import module_for_loader
 from tkinter import *
-from tkinter import ttk
-import cv2
 from VideoCapture import VideoCapture
 from PIL import Image, ImageTk
+import PIL
 from threading import Thread
 from LiveGraphs import LivePVals
-from matplotlib.animation import FuncAnimation
 from random import random
-from matplotlib.animation import FuncAnimation
+from Predictor import RecyclePredict
+from os.path import exists
+import torch
+import os
 
+RECYCLE_TYPE = ["Cardbrd", "Glass", "Metal", "Paper", "Plastic", "Trash"]
 
-RECYCLE_TYPE = ["Cardboard", "Plastic", "Paper", "Glass", "Garbage", "Metal"]
 class App:
 
-  def __init__(self, camera_src = 0) -> None:
+  def __init__(self, trained_file_path, camera_src = 0) -> None:
+    # Load the Trained Model
+    self.model = RecyclePredict()
+
+    if exists(trained_file_path):
+      self.model.prep_model(RECYCLE_TYPE) # Loads the ResNet that the model was trained on
+      self.model.load_trained_model(trained_file_path) # Loads the trained Model
+    else:
+      print("Trained File Path doesn't exist...")
+      print("Quiting Program")
+      os._exit(0)
+    
     # Create the window
     self.window = Tk()
     self.window.title("Jetcam Live")
@@ -32,6 +45,8 @@ class App:
 
     # Instatiate with no image
     self.image = None
+    self.photo = None
+    self.isConverted = False
     ############################### Canvases #####################################
     # Canvas for Live Camera
     self.canvas_img = Canvas(self.video_frame, width=self.camera.width, height=self.camera.height)
@@ -80,12 +95,19 @@ class App:
     # Set Delay
     self.delay = self.camera.fps
 
-    threads = []
     # Run Update Frame on Live a Thread
     camera_thrd = Thread(target=self.update_frame)
     camera_thrd.start()
+    predict_thrd = Thread(target=self.update_predictions)
+    predict_thrd.start()
+
+    # if self.image:
+    #   graph_thrd = Thread(target=utils.preprocess_image, args=(self.image, "cuda", self.model))
+    #   graph_thrd.start()
+    #   print("HERE", graph_thrd)
 
 
+    # This will replot the the graph every 200 ms
     ani = self.live_graph.run_animation()
     self.window.mainloop()
 
@@ -96,26 +118,38 @@ class App:
 
     if ret:
       self.image = Image.fromarray(frame)
-
       self.photo = ImageTk.PhotoImage(image=self.image)
+      self.isConverted = True
+
       self.canvas_img.create_image(0, 0, image=self.photo, anchor="nw")
-
+     
       if self.camera.is_running:
-
-        #ToDo -> Add image processing.
-        self.live_graph.y_vals = [random() for i in range(len(RECYCLE_TYPE))]
         self.window.after(self.delay, self.update_frame)
 
-  def start_camera (self):
+  def update_predictions(self):
+    
+    if self.isConverted:
+      self.image = self.model.preprocess_image(self.image)
+      probs = self.model.get_probabilities(self.image)
+      print(probs)
+      
 
+    self.isConverted = False
+
+    if self.camera.is_running:
+      self.window.after(self.delay + 100, self.update_predictions)
+
+        
+  def start_camera (self):
     if not self.camera.is_running:
       self.camera.is_running = True
       Thread(target=self.update_frame).start()
      
-
   def stop_camera(self):
     if  self.camera.is_running:
       self.camera.is_running = False
 
+path = "/home/cs5500/recycle-ai-neu/data/resnet18_recycle_train.pth"
 
-App()
+App(trained_file_path=path)
+os._exit(0)

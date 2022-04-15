@@ -13,7 +13,7 @@ class LivePVals:
       self.figure = plt.Figure(figsize = (4, 2), dpi = 100)
       self.ax = self.figure.add_subplot(111)
       self.x_vals = x_vals 
-      self.y_vals = 0     # x-array
+      self.y_vals = [0 for x in range(len(x_vals))]   # x-array
       
 
   def animate(self, i):
