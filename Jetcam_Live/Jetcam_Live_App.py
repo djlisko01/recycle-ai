@@ -8,7 +8,7 @@ import PIL
 from threading import Thread
 from LiveGraphs import LivePVals
 from random import random
-# from Predictor import RecyclePredict
+from Predictor import RecyclePredict
 from os.path import exists
 import torch
 import os
@@ -23,16 +23,23 @@ class App:
   to furhter improve predicitons.
   """
   def __init__(self, trained_file_path, camera_src = 0) -> None:
-    # Load the Trained Model
-    # self.model = RecyclePredict()
+     ################################ Load the Trained Dataset #########################
 
-    # if exists(trained_file_path):
-    #   self.model.prep_model(RECYCLE_TYPE) # Loads the ResNet that the model was trained on
-    #   self.model.load_trained_model(trained_file_path) # Loads the trained Model
-    # else:
-    #   print("Trained File Path doesn't exist...")
-    #   print("Quiting Program")
-    #   os._exit(0)
+    self.model = RecyclePredict()
+
+    if exists(trained_file_path):
+
+      self.model.prep_model(RECYCLE_TYPE) # Loads the ResNet that the model was trained on
+      self.model.load_trained_model(trained_file_path) # Loads the trained Model
+
+      # Running this does a test prediction before loading the full application.
+      # The first predicition takes ~ 2 mins, but then drastically speeds up to about 0.05 seconds per prediction.
+      self.model.test_predict()
+
+    else:
+      print("Trained File Path doesn't exist...")
+      print("Quiting Program")
+      os._exit(0)
     
     # Create the window
     self.window = Tk()
@@ -104,8 +111,8 @@ class App:
     # Run Update Frame on Live a Thread
     camera_thrd = Thread(target=self.update_frame)
     camera_thrd.start()
-    # predict_thrd = Thread(target=self.update_predictions)
-    # predict_thrd.start()
+    predict_thrd = Thread(target=self.update_predictions)
+    predict_thrd.start()
 
     # This will replot the the graph every 200 ms
     ani = self.live_graph.run_animation()
@@ -124,8 +131,8 @@ class App:
       self.canvas_img.create_image(0, 0, image=self.photo, anchor="nw")
 
 
-      # This is to generate random live y_vals for now
-      self.live_graph.y_vals = [random() for i in range(len(RECYCLE_TYPE))]
+      # # This is to generate random live y_vals for now
+      # self.live_graph.y_vals = [random() for i in range(len(RECYCLE_TYPE))]
      
       if self.camera.is_running:
         self.window.after(self.delay, self.update_frame)
@@ -135,7 +142,11 @@ class App:
     if self.isConverted:
       self.image = self.model.preprocess_image(self.image)
       probs = self.model.get_probabilities(self.image)
+      prediction = self.model.get_prediction()
+      print("Probs")
       print(probs)
+      print("Prediction:")
+      print(prediction)
       
     self.isConverted = False
 
@@ -146,7 +157,7 @@ class App:
   def start_camera (self):
     if not self.camera.is_running:
       self.camera.is_running = True
-      Thread(target=self.update_frame).start()
+      # Thread(target=self.update_frame).start()
      
   def stop_camera(self):
     if  self.camera.is_running:
