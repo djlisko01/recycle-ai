@@ -144,7 +144,7 @@ class App:
       probs = self.model.get_probabilities(self.image)
       prediction = self.model.get_prediction()
       print("Probs")
-      print(probs)
+      self.live_graph.y_vals = probs
       print("Prediction:")
       print(prediction)
       
