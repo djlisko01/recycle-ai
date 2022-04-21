@@ -1,0 +1,57 @@
+# import libraries 
+import unittest
+import os
+
+from matplotlib import patheffects
+import torch
+import torchvision
+import torchvision.transforms as transforms
+import torch.nn.functional as F
+import numpy as np
+from PIL import Image
+import os
+import time
+import cv2
+from Predictor import RecyclePredict
+
+
+
+class ML_Model_Unit_Test(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        start = time.time()
+        
+        # init model and attributes
+        print("LOADING MODEL COULD TAKE 5 PLUS MINUTES...FYI")
+        self.test = RecyclePredict()
+        self.classes = ["Cardbrd", "Glass", "Metal", "Paper", "Plastic", "Trash"]
+        self.model_path = "data/resnet18_recycle_train.pth"
+        self.img_path = "data/testing_data/test/cardboard/cardboard11.jpg"
+
+        # prep model
+        self.test.prep_model(self.classes)
+
+        # Converts cardboard11.jpg to Tensor Format 
+        self.test.load_trained_model(self.model_path)
+        img = cv2.imread(self.img_path, cv2.IMREAD_ANYCOLOR)
+        img = cv2.resize(img, (224, 224))
+        img = Image.fromarray(img)
+        img = self.test.preprocess_image(img)
+
+        # calculate probabilties and prediction
+        self.probabilities = self.test.get_probabilities(img)
+        self.prediction = self.test.get_prediction()
+
+        end = time.time()
+
+        print("Set up took", end - start, "seconds to run")
+
+    def test_model_returns_prediction(self):
+        print(self.prediction, "----THIS IS THE PREDICTION----")
+
+    def test_model_returns_probabilties(self):
+        print(self.probabilities, "----THIS IS THE PROBABILTIES----")
+
+
+if __name__ == '__main__':
+    unittest.main(argv=['first-arg-is-ignored'], exit=False)
