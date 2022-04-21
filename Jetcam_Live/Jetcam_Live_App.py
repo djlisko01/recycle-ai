@@ -1,20 +1,22 @@
 #---------Imports
-from ast import mod
 from importlib.util import module_for_loader
 from tkinter import *
 from VideoCapture import VideoCapture
 from PIL import Image, ImageTk
-import PIL
 from threading import Thread
+import threading
 from LiveGraphs import LivePVals
 from random import random
 from Predictor import RecyclePredict
 from os.path import exists
-import torch
+import time
 import os
+import DataServe
+import numpy
 #---------End of imports
 
 RECYCLE_TYPE = ["Cardbrd", "Glass", "Metal", "Paper", "Plastic", "Trash"]
+IMG_SAVE_PATH = "./data/camera_pictures"
 
 class App:
   """ This will run an application that provides a live video feed, 
@@ -46,6 +48,8 @@ class App:
     self.window.title("Jetcam Live")
     self.camera_src = camera_src
 
+    self.temp_y = [0 for i in range(len(RECYCLE_TYPE))]
+
     ################################ Frames ###################################
 
     self.main_frame = Frame(self.window, padx=5 ,pady=5)
@@ -60,6 +64,7 @@ class App:
     self.image = None
     self.photo = None
     self.isConverted = False
+    
     ############################### Canvases #####################################
     # Canvas for Live Camera
     self.canvas_img = Canvas(self.video_frame, width=self.camera.width, height=self.camera.height)
@@ -74,36 +79,27 @@ class App:
     ############################### Buttons ######################################
     
     # Start and Stop Buttons Camera
-    self.btn_start = Button(self.main_frame, text="Start Camera", command=self.start_camera)
-    self.btn_stop = Button(self.main_frame, text="Stop Camera", command=self.stop_camera)
+    self.make_pred_btn = Button(self.main_frame, text="Make Prediction", command=self.pause_camera)
+  
+    # # Capture Images Based on Recycling Category
+    def save_buttons(col_i = 3, row_i=3):
+      for item in RECYCLE_TYPE:
+  
+        self.photo_save_btn = Button(self.main_frame, text = item, command= lambda x = item: Thread(self.save_images(x)).start())
+        self.photo_save_btn.grid(column=col_i, row=row_i)
+        col_i += 1
 
-    # Capture Images Based on Recycling Category
-    self.btn_cardboard = Button(self.main_frame, text="Cardboard")
-    self.btn_paper = Button(self.main_frame, text="Paper")
-    self.btn_plastic = Button(self.main_frame, text="Plastic")
-    self.btn_metal = Button(self.main_frame, text="Metal")
-    self.btn_glass = Button(self.main_frame, text="Glass")
-    self.btn_trash = Button(self.main_frame, text="Trash")
+    save_buttons()
 
-   
     ############################### Grid Layout #################################
 
     self.main_frame.grid(column=0, row=0)
     self.video_frame.grid(column=0, row=0, columnspan=3, rowspan=2)
-    self.graph_frame.grid(column=3, row =0, columnspan=6, rowspan=2)
+    self.graph_frame.grid(column=3, row =0, columnspan=len(RECYCLE_TYPE), rowspan=2)
 
 
     # Start and Stop Grid Location
-    self.btn_start.grid(column=1, row=3)
-    self.btn_stop.grid(column=2, row=3)
-
-    # Recycle Button Categories
-    self.btn_cardboard.grid(column=3, row=3)
-    self.btn_paper.grid(column=4, row=3)
-    self.btn_plastic.grid(column=5, row=3)
-    self.btn_metal.grid(column=6, row=3)
-    self.btn_glass.grid(column=7, row=3)
-    self.btn_trash.grid(column=8, row=3)
+    self.make_pred_btn.grid(column=0, row=3, columnspan=3)
 
     # Set Delay
     self.delay = self.camera.fps
@@ -130,39 +126,51 @@ class App:
 
       self.canvas_img.create_image(0, 0, image=self.photo, anchor="nw")
 
+      self.temp_y = [random() for x in range(len(RECYCLE_TYPE))]
 
-      # # This is to generate random live y_vals for now
-      # self.live_graph.y_vals = [random() for i in range(len(RECYCLE_TYPE))]
-     
-      if self.camera.is_running:
-        self.window.after(self.delay, self.update_frame)
+      if not self.camera.is_running:
+        time.sleep(3)
+        self.camera.is_running = True
+    
+      self.window.after(self.delay, self.update_frame)
 
   def update_predictions(self):
     
     if self.isConverted:
+      # self.live_graph.y_vals = self.temp_y
+      # self.pred_i = numpy.argmax(self.temp_y)
+      # prediction  = RECYCLE_TYPE[self.pred_i]
+      # print(prediction)
+      
       self.image = self.model.preprocess_image(self.image)
       probs = self.model.get_probabilities(self.image)
-      prediction = self.model.get_prediction()
+      self.pred_i = self.model.get_prediction()
       print("Probs")
       self.live_graph.y_vals = probs
       print("Prediction:")
+      prediction = RECYCLE_TYPE[self.pred_i]
       print(prediction)
-      
+
+      # Post Prediction to ThingSpeak if camera not running
+
     self.isConverted = False
+    self.window.after(self.delay + 100, self.update_predictions)
 
+  def save_images(self, item):
+    if self.image:
+        self.camera.save_img(IMG_SAVE_PATH, item)
+        time.sleep(2)
+
+  def pause_camera (self):
     if self.camera.is_running:
-      self.window.after(self.delay + 100, self.update_predictions)
-
-        
-  def start_camera (self):
-    if not self.camera.is_running:
-      self.camera.is_running = True
-      # Thread(target=self.update_frame).start()
-     
-  def stop_camera(self):
-    if  self.camera.is_running:
       self.camera.is_running = False
 
+      # Send Prediciton to thingspeak
+      prediction = RECYCLE_TYPE[self.pred_i]
+      data_send = DataServe.DataServe()
+      data_send.PostThingSpeak(prediction, self.pred_i)
+      print("Prediction Sent:", prediction)
+    
 path = "/home/cs5500/recycle-ai-neu/data/resnet18_recycle_train.pth"
 
 App(trained_file_path=path)

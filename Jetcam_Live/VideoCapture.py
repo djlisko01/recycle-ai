@@ -49,6 +49,32 @@ class VideoCapture:
       self.frame = frame
       time.sleep(1/self.fps)
 
+  def save_img(self, path, img_name):
+
+    try:    
+      if img_name == "Cardbrd":
+        img_name = "cardboard"
+
+      img_name = img_name.lower()
+
+      if img_name not in os.listdir(path):
+        os.mkdir(path + "/" + img_name)
+
+      # Keep iterating until a file name is available.
+      i = 1
+      filename = path + "/" + img_name + "/" + "LIVE_IMG_" + img_name  + str(i) + ".jpg"
+      if self.ret:
+        # Checks if filename already exists
+        while os.path.exists(filename):
+          i += 1
+          filename = path + "/" + img_name + "/" + "LIVE_IMG_" + img_name  + str(i) + ".jpg"
+        print(filename)
+        cv2.imwrite(filename, self.frame)
+
+    except NotADirectoryError:
+      print(path)
+
+
   def __del__(self):
     """ Releases the camera when the program is closed """
     if self.is_running:
