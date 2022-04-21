@@ -6,7 +6,7 @@ import time
 
 class VideoCapture:
   
-
+  
   def __init__(self, width=224, height=224, capture_src = 0, fps=30) -> None:
     """This Creates a Video Capture Object, which will set up the camera
      with a height, width and capture rate (in fps) """
