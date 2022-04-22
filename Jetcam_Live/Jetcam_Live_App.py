@@ -16,7 +16,7 @@ import numpy
 #---------End of imports
 
 RECYCLE_TYPE = ["Cardbrd", "Glass", "Metal", "Paper", "Plastic", "Trash"]
-IMG_SAVE_PATH = "./data/camera_pictures"
+IMG_SAVE_PATH = "../data/camera_pictures"
 
 class App:
   """ This will run an application that provides a live video feed, 
@@ -151,12 +151,12 @@ class App:
       prediction = RECYCLE_TYPE[self.pred_i]
       print(prediction)
 
-      # Post Prediction to ThingSpeak if camera not running
-
     self.isConverted = False
     self.window.after(self.delay + 100, self.update_predictions)
 
+
   def save_images(self, item):
+
     if self.image:
         self.camera.save_img(IMG_SAVE_PATH, item)
         time.sleep(2)
