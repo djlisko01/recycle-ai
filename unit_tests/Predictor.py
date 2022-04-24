@@ -80,12 +80,8 @@ class RecyclePredict:
     print("Probabilites for test")
     print(self.get_probabilities(img))
     print("Test Prediction:", self.get_prediction())
-
     print("Test Prediction Done...")
 
-  
-
-  
   def __del__(self):
     """ Clears the cache after closing the program """
 

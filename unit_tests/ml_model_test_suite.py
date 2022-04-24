@@ -15,7 +15,6 @@ import cv2
 from Predictor import RecyclePredict
 
 
-
 class ML_Model_Unit_Test(unittest.TestCase):
     @classmethod
     def setUpClass(self):
@@ -47,10 +46,15 @@ class ML_Model_Unit_Test(unittest.TestCase):
         print("Set up took", end - start, "seconds to run")
 
     def test_model_returns_prediction(self):
-        print(self.prediction, "----THIS IS THE PREDICTION----")
+        '''Asserts that the model returns a prediction that is of type np.int64 (integer)'''
+        self.assertIsInstance(self.prediction, np.int64)
 
     def test_model_returns_probabilties(self):
-        print(self.probabilities, "----THIS IS THE PROBABILTIES----")
+        '''Asserts that the model returns a probabilities of np.ndarray (array) with 6 np.float32 (floats)'''
+        self.assertIsInstance(self.probabilities, np.ndarray)
+        self.assertEqual(len(self.probabilities), 6)
+        for prob in self.probabilities:
+            self.assertIsInstance(prob, np.float32)
 
 
 if __name__ == '__main__':
