@@ -1,6 +1,8 @@
 # import libraries 
+from reprlib import recursive_repr
 import unittest
 import os
+import shutil
 from VideoCapture import VideoCapture
 
 # # Check device number
@@ -39,11 +41,27 @@ class Test_Camera_Unit_Test(unittest.TestCase):
         self.assertIsInstance(self.camera, VideoCapture)
         print(self.camera, "is type", type(self.camera))
 
-    def test_save_file(self):
+    def test_take_picture_and_save_file(self):
         '''Asserts that the save image method is properly creating the necessary files and directory paths'''
-        test_path = "../data/camera_pictures/"
+        # take a picture with camera
+        self.camera.get_frame()
+
+        # root directory to save && directory and suffix
+        test_path = "./data/camera_pictures"
         test_img_name = "test_images"
+
+        # save picture to directory
         self.camera.save_img(test_path, test_img_name)
+        
+        # assert picture created
+        file_exists = os.path.exists("./data/camera_pictures/test_images/LIVE_IMG_test_images1.jpg")
+        self.assertTrue(file_exists)
+        print("Test Picture taken and saved")
+
+        # delete image
+        delete_dir = "./data/camera_pictures/test_images"
+        shutil.rmtree(delete_dir)
+        print("Test Picture deleted")
 
 
 if __name__ == '__main__':
