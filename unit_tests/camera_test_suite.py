@@ -1,8 +1,10 @@
 # import libraries 
-from reprlib import recursive_repr
 import unittest
 import os
 import shutil
+import sys
+
+sys.path.insert(1, './Jetcam_Live')
 from VideoCapture import VideoCapture
 
 # # Check device number

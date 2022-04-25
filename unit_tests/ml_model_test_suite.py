@@ -12,6 +12,10 @@ from PIL import Image
 import os
 import time
 import cv2
+import sys
+
+sys.path.insert(1, './Jetcam_Live')
+from VideoCapture import VideoCapture
 from Predictor import RecyclePredict
 
 
