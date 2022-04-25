@@ -50,7 +50,7 @@ class App:
 
     self.temp_y = [0 for i in range(len(RECYCLE_TYPE))]
 
-    ################################ Frames ###################################
+    ################################ Frames ######################################
 
     self.main_frame = Frame(self.window, padx=5 ,pady=5)
     self.video_frame = Frame(self.main_frame, pady=10, padx=10)
@@ -156,10 +156,8 @@ class App:
 
 
   def save_images(self, item):
-
-    if self.image:
-        self.camera.save_img(IMG_SAVE_PATH, item)
-        time.sleep(2)
+    self.camera.save_img(IMG_SAVE_PATH, item)
+    time.sleep(2)
 
   def pause_camera (self):
     if self.camera.is_running:
@@ -170,8 +168,12 @@ class App:
       data_send = DataServe.DataServe()
       data_send.PostThingSpeak(prediction, self.pred_i)
       print("Prediction Sent:", prediction)
-    
-path = "/home/cs5500/recycle-ai-neu/data/resnet18_recycle_train.pth"
+
+# Original Path:
+# path = "/home/cs5500/recycle-ai-neu/data/resnet18_recycle_train.pth"
+
+# New Larger Dataset:
+path = "../data/resnet18_recycle_train_2022-04-23.pth"
 
 App(trained_file_path=path)
 os._exit(0)
