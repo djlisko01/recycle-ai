@@ -30,7 +30,6 @@ class VideoCapture:
 
   
   def process(self):
-
     """ Processes a live feed if the camera is running """
 
     if self.is_running:
@@ -40,13 +39,14 @@ class VideoCapture:
       if ret:
         frame = cv2.resize(frame, (self.width, self.height))
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-      
+
       else:
         print("[Video Capture Failed] stream end")
         self.is_running = False
       
       self.ret = ret
       self.frame = frame
+
       time.sleep(1/self.fps)
 
   def save_img(self, path, img_name):

@@ -1,10 +1,8 @@
 #---------Imports
-from importlib.util import module_for_loader
 from tkinter import *
 from VideoCapture import VideoCapture
 from PIL import Image, ImageTk
 from threading import Thread
-import threading
 from LiveGraphs import LivePVals
 from random import random
 from Predictor import RecyclePredict
@@ -25,6 +23,7 @@ class App:
   to furhter improve predicitons.
   """
   def __init__(self, trained_file_path, camera_src = 0) -> None:
+
      ################################ Load the Trained Dataset #########################
 
     self.model = RecyclePredict()
@@ -43,6 +42,9 @@ class App:
       print("Quiting Program")
       os._exit(0)
     
+
+    ###################### Create Window and Check Camera Source ##################
+
     # Create the window
     self.window = Tk()
     self.window.title("Jetcam Live")
@@ -52,10 +54,10 @@ class App:
 
     ################################ Frames ######################################
 
-    self.main_frame = Frame(self.window, padx=5 ,pady=5)
-    self.video_frame = Frame(self.main_frame, pady=10, padx=10)
-    self.graph_frame = Frame(self.main_frame, padx= 10)
-
+    self.video_frame = Frame(self.window, pady=10, padx=10, bg="#6c757d")
+    self.graph_frame = Frame(self.window, pady=20, padx= 10,  bg="#6c757d")
+    self.btn_frame_save = Frame(self.graph_frame, pady=10,  bg="#6c757d")
+ 
     ############################### Create Camera Object #########################
     
     self.camera = VideoCapture(capture_src=camera_src)
@@ -67,42 +69,56 @@ class App:
     
     ############################### Canvases #####################################
     # Canvas for Live Camera
+  
     self.canvas_img = Canvas(self.video_frame, width=self.camera.width, height=self.camera.height)
-    self.canvas_img.pack()
+    self.canvas_img.pack(fill="both", expand=True)
 
-    # # # Canvas for Graph
+    # Canvas for Graph
     # self.canvas_graph = PvalueGraph(x_values=RECYCLE_TYPE, y_values= [self.i for x in range(len(RECYCLE_TYPE))])
     # self.canvas_graph.show_plot(self.graph_frame)
     self.live_graph = LivePVals(RECYCLE_TYPE)
     canvas = self.live_graph.create_graph_canvas(self.graph_frame)
-    canvas.get_tk_widget().pack()
+    # canvas.get_tk_widget().grid(column=0, row=0, columnspan=6)
+    canvas.get_tk_widget().pack(fill="both", expand=True)
+
+
     ############################### Buttons ######################################
     
     # Start and Stop Buttons Camera
-    self.make_pred_btn = Button(self.main_frame, text="Make Prediction", command=self.pause_camera)
+    self.make_pred_btn = Button(self.video_frame, text="Make Prediction", command=self.send_prediction, font="Times 10 bold")
+    self.make_pred_btn.pack(pady=10, fill="both")
   
     # # Capture Images Based on Recycling Category
-    def save_buttons(col_i = 3, row_i=3):
+    def save_buttons(col_i = 0, row_i=1):
       for item in RECYCLE_TYPE:
   
-        self.photo_save_btn = Button(self.main_frame, text = item, command= lambda x = item: Thread(self.save_images(x)).start())
-        self.photo_save_btn.grid(column=col_i, row=row_i)
+        self.photo_save_btn = Button(self.btn_frame_save, text = item, 
+            command= lambda x = item: Thread(self.save_images(x)).start(), font="Times 10 bold")
+        self.photo_save_btn.grid(column=col_i, row=row_i, pady=10, padx=5)
         col_i += 1
 
     save_buttons()
 
     ############################### Grid Layout #################################
 
-    self.main_frame.grid(column=0, row=0)
-    self.video_frame.grid(column=0, row=0, columnspan=3, rowspan=2)
-    self.graph_frame.grid(column=3, row =0, columnspan=len(RECYCLE_TYPE), rowspan=2)
+    # self.main_frame.grid(column=0, row=0)
+    self.video_frame.grid(column=0, row=0, columnspan=3, rowspan=2, sticky="NSEW")
+    self.graph_frame.grid(column=3, row =0, columnspan=len(RECYCLE_TYPE), rowspan=2, sticky="NSEW")
+    
+    # Add the save buttons below the graph
+    self.btn_frame_save.pack()
 
+    # This will adjust the size of the frames -> causing the graph/image to resize in response.
+    self.window.rowconfigure(0, weight=1)
+    self.window.rowconfigure(1, weight=1)
+    self.window.columnconfigure(0, weight=1)
+    self.window.columnconfigure(3, weight=1)
 
-    # Start and Stop Grid Location
-    self.make_pred_btn.grid(column=0, row=3, columnspan=3)
 
     # Set Delay
     self.delay = self.camera.fps
+
+    ############################### Threading #################################
 
     # Run Update Frame on Live a Thread
     camera_thrd = Thread(target=self.update_frame)
@@ -112,6 +128,7 @@ class App:
 
     # This will replot the the graph every 200 ms
     ani = self.live_graph.run_animation()
+    self.window.bind("<Return>", self.send_prediction)
     self.window.mainloop()
 
  ############################### Functions ###################################
@@ -120,12 +137,17 @@ class App:
     ret, frame = self.camera.get_frame()
 
     if ret:
-      self.image = Image.fromarray(frame)
-      self.photo = ImageTk.PhotoImage(image=self.image)
+      self.image = Image.fromarray(frame) # Convert Numpy Array to PIL image
+
+      width = self.canvas_img.winfo_width()
+      height = self.canvas_img.winfo_height()
+
+      self.image = self.image.resize((width, height))
+      
+      self.photo = ImageTk.PhotoImage(image=self.image) 
       self.isConverted = True
 
       self.canvas_img.create_image(0, 0, image=self.photo, anchor="nw")
-
       self.temp_y = [random() for x in range(len(RECYCLE_TYPE))]
 
       if not self.camera.is_running:
@@ -154,12 +176,11 @@ class App:
     self.isConverted = False
     self.window.after(self.delay + 100, self.update_predictions)
 
-
   def save_images(self, item):
     self.camera.save_img(IMG_SAVE_PATH, item)
     time.sleep(2)
 
-  def pause_camera (self):
+  def send_prediction (self, e=None):
     if self.camera.is_running:
       self.camera.is_running = False
 
@@ -175,5 +196,6 @@ class App:
 # New Larger Dataset:
 path = "../data/resnet18_recycle_train_2022-04-23.pth"
 
-App(trained_file_path=path)
-os._exit(0)
+if __name__ == "__main__":
+  App(trained_file_path=path)
+  os._exit(0)
