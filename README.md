@@ -5,13 +5,21 @@ CS5500: Foundation of Software Engineering
 Team 3 - Daniel Lisko, Matthew Vargas, Michael Chang, Semaa Amin, and Yvette Green
 
 ## Project Description
-Image Classification with Jetson Nano 
+Image Classification 
  - captures an image of a piece of garbage 
  - classifies the image as trash for landfill or a recyclable item
  - saves the data 
  - sends a tweet with the result
 
 ![Website Screenshot](https://github.com/greeny90/recycle-ai/blob/main/logo.png)
+
+## Technologies Used
+- Jetson Nano
+- Python
+- Arduino board 
+- ThingSpeak
+
+![Website Screenshot](https://developer.nvidia.com/sites/default/files/akamai/embedded/images/jetsonNano/JetsonNano-DevKit_Front-Top_Right_trimmed.jpg)
 
 ## How It Works
 
