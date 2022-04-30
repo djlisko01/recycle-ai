@@ -11,4 +11,3 @@ Image Classification with Jetson Nano
  - saves the data 
  - sends a tweet with the result
 
-![Website Screenshot](https://github.com/greeny90/recycle-ai/blob/main/EYE-RecAIcle.png)
