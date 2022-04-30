@@ -16,11 +16,15 @@ Image Classification with Jetson Nano
 ## How It Works
 
 ## Future Goals for the Project
+- Expand on the model for more accurate predictions
+   - Crowdsource to obtain images that expand our training data set (eg. captcha model)
+- Connect to a database (scalability)
+- Expand to include more categories 
+   - E-waste and compost
+- Possibly present the project at a SmartCities event
+- Upgrade hardware 
+   - 4GB or 8GB Jetson Nano 
+   - Add better Arduino boards to include LED strip lights, LCD screens, and sound
 
 
 
-<!-- blank line -->
-<figure class="video_container">
-  <iframe src="https://www.youtube.com/embed/cEYqT4EonIw" frameborder="0" allowfullscreen="true"> </iframe>
-</figure>
-<!-- blank line -->
