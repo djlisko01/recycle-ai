@@ -21,6 +21,6 @@ Image Classification with Jetson Nano
 
 <!-- blank line -->
 <figure class="video_container">
-  <iframe src="https://youtu.be/cEYqT4EonIw" frameborder="0" allowfullscreen="true"> </iframe>
+  <iframe src="https://www.youtube.com/embed/cEYqT4EonIw" frameborder="0" allowfullscreen="true"> </iframe>
 </figure>
 <!-- blank line -->
