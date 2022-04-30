@@ -10,3 +10,5 @@ Image Classification with Jetson Nano
  - classifies the image as trash for landfill or a recyclable item
  - saves the data 
  - sends a tweet with the result
+
+![Website Screenshot](https://github.com/greeny90/recycle-ai/blob/main/EYE-RecAIcle.png)
