@@ -13,7 +13,7 @@ Image Classification
 
 ![Website Screenshot](https://github.com/greeny90/recycle-ai/blob/main/logo.png)
 
-## Technologies Used
+## Hardware and Technologies Used
 - Jetson Nano: https://developer.nvidia.com/embedded/jetson-nano-developer-kit
 - Python
 - Arduino board 
