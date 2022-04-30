@@ -14,12 +14,11 @@ Image Classification
 ![Website Screenshot](https://github.com/greeny90/recycle-ai/blob/main/logo.png)
 
 ## Technologies Used
-- Jetson Nano
+- Jetson Nano: https://developer.nvidia.com/embedded/jetson-nano-developer-kit
 - Python
 - Arduino board 
-- ThingSpeak
+- ThingSpeak: https://thingspeak.com/
 
-![Website Screenshot](https://developer.nvidia.com/sites/default/files/akamai/embedded/images/jetsonNano/JetsonNano-DevKit_Front-Top_Right_trimmed.jpg)
 
 ## How It Works
 
