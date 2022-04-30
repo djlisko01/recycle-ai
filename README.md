@@ -12,3 +12,15 @@ Image Classification with Jetson Nano
  - sends a tweet with the result
 
 ![Website Screenshot](https://github.com/greeny90/recycle-ai/blob/main/logo.png)
+
+## How It Works
+
+## Future Goals for the Project
+
+
+
+<!-- blank line -->
+<figure class="video_container">
+  <iframe src="https://youtu.be/cEYqT4EonIw" frameborder="0" allowfullscreen="true"> </iframe>
+</figure>
+<!-- blank line -->
