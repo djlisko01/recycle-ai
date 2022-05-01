@@ -18,8 +18,8 @@ Image Classification
 - Kaggle: https://www.kaggle.com/
 - Logitech C270 HD Webcam
 - Python
-- Arduino board 
-- ThingSpeak: https://thingspeak.com/
+- Arduino board - MKR 1010
+- ThingSpeak: https://thingspeak.com/ - Channel, TalkBack & ThingTweet
 - Twitter
 
 ## How It Works 
