@@ -193,7 +193,7 @@ void loop() {
            //lcd.clear();
            //turnOffAllStripLights();
        }
-       // Glass = 1 = white light
+       // Glass = 1 = purple light
       if((String)newCommand[3] == "1"){
           //strip.setPixelColor(10, glassColor);  // set LED 10 to the color in variable c (red)
           //lcd.write("Glass");
@@ -201,10 +201,10 @@ void loop() {
           postTwitterMssg(createStatus("Glass"));
           outputResult = 1;
           Serial.print("Glass, ");
-          Serial.print("The white light is ON now \n");
+          Serial.print("The purple light is ON now \n");
           digitalWrite(Glass, HIGH);    // turn on White LED on Pin 1
           delay(5000);                  // wait for 5s
-          Serial.print("The white light is OFF now \n");
+          Serial.print("The purple light is OFF now \n");
           digitalWrite(Glass, LOW);     // turn off Yellow LED on Pin 1
           delay(2000);
           //lcd.clear();
@@ -264,7 +264,7 @@ void loop() {
         //turnOffAllStripLights();
        }
 
-      // Paper = 5 = White again as I ran out of colours
+      // Paper = 5 = orange 
       if((String)newCommand[3] == "3"){
         //strip.setPixelColor(30, paperColor);  // set LED 10 to the color in variable c (red)
         totalPaper ++;
@@ -272,11 +272,11 @@ void loop() {
         postTwitterMssg(createStatus("Paper"));
         outputResult = 5;
         Serial.print("Paper, ");
-        Serial.print("The white light is ON now \n");     
-        digitalWrite(Paper, HIGH);    // turn on White LED on Pin 5
+        Serial.print("The orange light is ON now \n");     
+        digitalWrite(Paper, HIGH);    // turn on Orange LED on Pin 5
         delay(5000);                  // wait for 5s
-        Serial.print("The white light is OFF now \n");     
-        digitalWrite(Paper, LOW);     // turn off White LED on Pin 5
+        Serial.print("The orange light is OFF now \n");     
+        digitalWrite(Paper, LOW);     // turn off Orange LED on Pin 5
         delay(2000);
         //lcd.clear();
         //turnOffAllStripLights();
