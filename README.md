@@ -6,10 +6,10 @@ Team 3 - Daniel Lisko, Matthew Vargas, Michael Chang, Semaa Amin, and Yvette Gre
 
 ## Project Description
 Image Classification with Jetson Nano coupled with Output from Arduino
- - Inspiration came from the confusion of users properly disposing of waste
- - Help reduce the manual intervention of disposing of different categories of waste
- - Personal vs. Commercial 
-  - distributed prototypes at every waste bin can help crowdsource model improvement. The same model can help automate robotics sorting at large disposal facilities
+* Inspiration came from the confusion of users properly disposing of waste
+* Help reduce the manual intervention of disposing of different categories of waste
+* Personal vs. Commercial 
+ * distributed prototypes at every waste bin can help crowdsource model improvement. The same model can help automate robotics sorting at large disposal facilities
 
 
 ![Website Screenshot](https://github.com/greeny90/recycle-ai/blob/main/logo.png)
