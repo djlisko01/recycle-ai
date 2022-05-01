@@ -13,14 +13,32 @@ Image Classification
 
 ![Website Screenshot](https://github.com/greeny90/recycle-ai/blob/main/logo.png)
 
-## Technologies Used
-- Jetson Nano: https://developer.nvidia.com/embedded/jetson-nano-developer-kit
+## Hardware and Technologies Used
+- Nvidia Jetson Nano Developer Kit: https://developer.nvidia.com/embedded/jetson-nano-developer-kit
+- Kaggle: https://www.kaggle.com/
+- Logitech C270 HD Webcam
 - Python
 - Arduino board 
 - ThingSpeak: https://thingspeak.com/
+- Twitter
 
-
-## How It Works
+## How It Works 
+![Website Screenshot](https://github.com/greeny90/recycle-ai/blob/main/howitworks.png)
+- A USB Logitech camera is connected to the Jetson Nano and takes a picture of a piece of garbage.
+- The image is compared with the machine learning model trained with Kaggle Dataset of Recyclable objects.
+- The image is identified as one of the following: 
+     - Cardboard: 0
+     - Glass: 1
+     - Metal: 2
+     - Paper: 3
+     - Plastic: 4
+     - Trash: 5  
+- ThingSpeak's ThingTweet app sends a post on Twitter. 
+![Website Screenshot](https://github.com/greeny90/recycle-ai/blob/main/tweet.png)
+- ThingSpeak's TalkBack feature changes the LED light on the Arduino board based on the image identified. 
+     - Green Light = Recycling 
+     - Red = Trash
+![Website Screenshot](https://github.com/greeny90/recycle-ai/blob/main/arduino.png)
 
 ## Future Goals for the Project
 - Expand on the model for more accurate predictions
