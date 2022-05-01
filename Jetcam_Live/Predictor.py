@@ -11,6 +11,8 @@ import time
 import cv2
 #---------End of imports
 
+WIDTH, HEIGHT = 224, 224
+
 class RecyclePredict:
 
   def __init__(self) -> None:
@@ -47,8 +49,10 @@ class RecyclePredict:
     # mean = torch.Tensor([0.485, 0.456, 0.406]).cuda()
     # std = torch.Tensor([0.229, 0.224, 0.225]).cuda()
 
+    # Adjust WIDTH and HEIGHT to the same as the images from the training dataset.
+    image = image.resize((WIDTH, HEIGHT))
     image = transforms.functional.to_tensor(image).to(self.device)
-    # image.sub_(mean[:, None, None]).div_(std[:, None, None])
+    
     print("Done...")
     return image[None, ...]
 

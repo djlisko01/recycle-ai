@@ -24,7 +24,7 @@ class App:
   """
   def __init__(self, trained_file_path, camera_src = 0) -> None:
 
-     ################################ Load the Trained Dataset #########################
+    ################################ Load the Trained Dataset #########################
 
     self.model = RecyclePredict()
 
@@ -163,7 +163,6 @@ class App:
       # self.pred_i = numpy.argmax(self.temp_y)
       # prediction  = RECYCLE_TYPE[self.pred_i]
       # print(prediction)
-      
       self.image = self.model.preprocess_image(self.image)
       probs = self.model.get_probabilities(self.image)
       self.pred_i = self.model.get_prediction()
