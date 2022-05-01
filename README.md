@@ -34,10 +34,10 @@ Image Classification
      - Plastic: 4
      - Trash: 5  
 - ThingSpeak's ThingTweet app sends a post on Twitter. 
-![Website Screenshot](https://github.com/greeny90/recycle-ai/blob/main/tweet.png)
 - ThingSpeak's TalkBack feature changes the LED light on the Arduino board based on the image identified. 
      - Green Light = Recycling 
      - Red = Trash
+![Website Screenshot](https://github.com/greeny90/recycle-ai/blob/main/tweet.png)=
 ![Website Screenshot](https://github.com/greeny90/recycle-ai/blob/main/arduino.png)
 
 ## Future Goals for the Project
