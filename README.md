@@ -5,11 +5,12 @@ CS5500: Foundation of Software Engineering
 Team 3 - Daniel Lisko, Matthew Vargas, Michael Chang, Semaa Amin, and Yvette Green
 
 ## Project Description
-Image Classification 
- - captures an image of a piece of garbage 
- - classifies the image as trash for landfill or a recyclable item
- - saves the data 
- - sends a tweet with the result
+Image Classification with Jetson Nano coupled with Output from Arduino
+ - Inspiration came from the confusion of users properly disposing of waste
+ - Help reduce the manual intervention of disposing of different categories of waste
+ - Personal vs. Commercial 
+  - distributed prototypes at every waste bin can help crowdsource model improvement. The same model can help automate robotics sorting at large disposal facilities
+
 
 ![Website Screenshot](https://github.com/greeny90/recycle-ai/blob/main/logo.png)
 
