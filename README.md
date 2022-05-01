@@ -23,6 +23,7 @@ Image Classification
 - Twitter
 
 ## How It Works 
+![Website Screenshot](https://github.com/greeny90/recycle-ai/blob/main/howitworks.png)
 - A USB Logitech camera is connected to the Jetson Nano and takes a picture of a piece of garbage.
 - The image is compared with the machine learning model trained with Kaggle Dataset of Recyclable objects.
 - The image is identified as one of the following: 
@@ -38,8 +39,6 @@ Image Classification
      - Green Light = Recycling 
      - Red = Trash
 ![Website Screenshot](https://github.com/greeny90/recycle-ai/blob/main/arduino.png)
-
-![Website Screenshot](https://github.com/greeny90/recycle-ai/blob/main/howitworks.png)
 
 ## Future Goals for the Project
 - Expand on the model for more accurate predictions
