@@ -22,7 +22,10 @@ Image Classification
 - ThingSpeak: https://thingspeak.com/
 - Twitter
 
-## How It Works 
+## Original Concept 
+![Website Screenshot](https://github.com/greeny90/recycle-ai/blob/main/originalconcept.png)
+
+## Finished Product
 ![Website Screenshot](https://github.com/greeny90/recycle-ai/blob/main/howitworks.png)
 - A USB Logitech camera is connected to the Jetson Nano and takes a picture of a piece of garbage.
 - The image is compared with the machine learning model trained with Kaggle Dataset of Recyclable objects.
